@@ -14,22 +14,25 @@
 #' @return A data frame with weight for cell 1 and 2, including the potential meta data for the SNP
 #' @export
 #'
-MiXcan_refit_summary <- function(model, x, y, pi, cov=NULL) {
+MiXcan_refit_summary_test <- function(model, x, y, pi, cov=NULL) {
   #summary <- MiXcan_extract_summary(x=x, y=y, pi=pi, model=model)
   weights=model
   w2 = subset(model, model$weight_cell_1  != 0 & model$weight_cell_2 !=0 )
   idx=match(w2$xNameMatrix, weights$xNameMatrix)
   weights$weight_cell_1[idx]=w2$weight_cell_1
   weights$weight_cell_2[idx]=w2$weight_cell_2
-
+  
   yhat=x %*% weights$weight_cell_1 *pi + x %*% weights$weight_cell_2 *(1-pi)
-
+  
   r=cor.test(y,yhat, use="complete.obs")
-  summary2= summary %>% data.frame() %>%
-    mutate(in_sample_r2_refit=r$estimate^2) %>%
-    mutate(in_sample_cor_pvalue_refit = r$p.value)
-
-  return(summary2)
+  summary = data.frame()
+  summary[1,1] = r$estimate^2
+  summary[1,2] = r$p.value
+  
+  colnames(summary)[1] = "in_sample_r2_refit"
+  colnames(summary)[2] = "in_sample_cor_pvalue_refit"
+  
+  return(summary)
 }
 
 
