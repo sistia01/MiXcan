@@ -67,6 +67,6 @@ MiXcan_refit_weight <- function(model, x, y, cov, pi) {
       filter(!(weight_cell_1 == 0 & weight_cell_1 == 0))
 
   }
-  return(MiXcan_weight_result)
+  return(MiXcan_weight_result2)
 }
 
